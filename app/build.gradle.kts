@@ -87,6 +87,7 @@ dependencies {
     "ksp"(libs.moshi.kotlin.codegen)
 
     implementation(libs.koin.android)
+    implementation(libs.koin.androidx.compose)
 
     implementation(project(":domain"))
     implementation(project(":data"))

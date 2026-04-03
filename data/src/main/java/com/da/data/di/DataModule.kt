@@ -26,4 +26,8 @@ val dataModule = module {
             playlistDao = get()
         )
     }
+
+
+    includes(networkModule)
+
 }

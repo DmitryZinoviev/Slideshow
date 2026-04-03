@@ -46,5 +46,14 @@ dependencies {
     ksp(libs.androidx.room.compiler)
     implementation(libs.koin.core)
 
+    implementation(libs.retrofit)
+    implementation(libs.moshi.kotlin)
+    implementation(libs.moshi.kotlin.codegen)
+    implementation(libs.converter.moshi)
+
+
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
+
     implementation(project(":domain"))
 }
