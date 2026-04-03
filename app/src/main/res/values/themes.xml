@@ -1,0 +1,4 @@
+<resources>
+
+    <style name="Theme.Slideshow" parent="Theme.MaterialComponents.Light" />
+</resources>
