@@ -10,15 +10,21 @@ import androidx.room.PrimaryKey
     foreignKeys = [
         ForeignKey(
             entity = PlaylistEntity::class,
-            parentColumns = ["id"],
-            childColumns = ["playlistId"],
+            parentColumns = ["playlistKey"],
+            childColumns = ["playlistKey"],
             onDelete = ForeignKey.CASCADE
         )
     ],
-    indices = [Index("playlistId")]
+    indices = [Index("playlistKey")]
 )
 data class PlaylistItemEntity(
     @PrimaryKey(autoGenerate = true)
-    val id: Long = 0,
-    val playlistId: Long,
+    val id: Int = 0,
+    val duration: Int?,
+    val dataSize: Int?,
+    val modified: Long?,
+    val creativeLabel: String?,
+    val playlistKey: String,
+    val creativeKey: String?,
+    val orderKey: Int?
 )

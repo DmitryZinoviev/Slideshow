@@ -1,12 +1,26 @@
 package com.da.data.local.db.entity
 
 import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "playlists")
+@Entity(
+    tableName = "playlists",
+    foreignKeys = [
+        ForeignKey(
+            entity = ScreenEntity::class,
+            parentColumns = ["screenKey"],
+            childColumns = ["screenKey"],
+            onDelete = ForeignKey.CASCADE
+        )
+    ],
+    indices = [Index("screenKey")]
+)
 data class PlaylistEntity(
-    @PrimaryKey(autoGenerate = true)
-    val id: Long = 0
+    @PrimaryKey
+    val playlistKey: String,
+    val screenKey: String
 )
 
 

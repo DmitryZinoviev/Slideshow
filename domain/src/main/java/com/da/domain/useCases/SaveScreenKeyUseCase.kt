@@ -5,7 +5,7 @@ import com.da.domain.repository.UserPreferencesRepository
 class SaveScreenKeyUseCase(
     private val repository: UserPreferencesRepository
 ) {
-    suspend operator fun invoke(key: String) {
-        repository.saveScreenKey(key)
+    suspend operator fun invoke(screenKey: String) {
+        repository.saveScreenKey(screenKey)
     }
 }

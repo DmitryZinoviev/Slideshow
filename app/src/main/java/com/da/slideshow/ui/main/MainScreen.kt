@@ -31,7 +31,11 @@ fun MainScreen(modifier: Modifier, viewModel: MainViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsState()
     MainView(modifier, state.screenKey, {
         viewModel.onAction(action = MainAction.ChangeScreenKeyAction(it))
-    }) {
+    },
+        {
+            viewModel.onAction(MainAction.LoadAction)
+        }) {
+        viewModel.onAction(MainAction.SyncAction(it))
 
     }
 
@@ -42,7 +46,8 @@ fun MainView(
     modifier: Modifier,
     screenKey: String,
     onScreenKeyChange: (String) -> Unit,
-    onLoadClick: () -> Unit
+    onGetDbClick: () -> Unit,
+    onSyncClick: (String) -> Unit
 ) {
     Column(
         modifier = modifier
@@ -62,11 +67,22 @@ fun MainView(
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
-            onClick = onLoadClick,
+            onClick = {onSyncClick(screenKey)},
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Load")
+            Text("Sync")
         }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+
+        Button(
+            onClick = onGetDbClick,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("get db")
+        }
+
     }
 }
 
@@ -74,7 +90,7 @@ fun MainView(
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    MainView(Modifier,"", {}){
+    MainView(Modifier,"", {}, {}){
 
 
     }

@@ -3,6 +3,7 @@ package com.da.data.di
 import androidx.room.Room
 import com.da.data.local.db.dao.PlaylistDao
 import com.da.data.local.db.AppDatabase
+import com.da.data.local.db.dao.ScreenDao
 import com.da.data.repository.PlaylistRepositoryImpl
 import com.da.data.repository.UserPreferencesRepositoryImpl
 import com.da.domain.repository.PlaylistRepository
@@ -23,10 +24,13 @@ val dataModule = module {
         get<AppDatabase>().playlistDao()
     }
 
+    single<ScreenDao> {
+        get<AppDatabase>().screenDao()
+    }
+
+
     single<PlaylistRepository> {
-        PlaylistRepositoryImpl(
-            playlistDao = get()
-        )
+        PlaylistRepositoryImpl(get(), get(), get(), get())
     }
 
     single<UserPreferencesRepository> {
@@ -36,6 +40,6 @@ val dataModule = module {
     }
 
 
-    includes(networkModule)
+    includes(networkModule, mapperModule)
 
 }

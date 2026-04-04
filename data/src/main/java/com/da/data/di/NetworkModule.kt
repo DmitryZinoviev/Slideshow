@@ -3,6 +3,7 @@ package com.da.data.di
 import com.da.data.remote.network.MoshiFactory
 import com.da.data.remote.network.OkHttpFactory
 import com.da.data.remote.network.PlaylistApi
+import com.da.data.remote.network.PlaylistDataSource
 import com.da.data.remote.network.RetrofitFactory
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -23,4 +24,9 @@ val networkModule = module {
     single<PlaylistApi> {
         get<Retrofit>().create(PlaylistApi::class.java)
     }
+
+    single<PlaylistDataSource> {
+        PlaylistDataSource(get())
+    }
+
 }

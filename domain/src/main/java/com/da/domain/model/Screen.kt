@@ -1,0 +1,22 @@
+package com.da.domain.model
+
+data class Screen(
+    val screenKey: String,
+    val playlists: List<Playlist>,
+    val modified: Long
+)
+
+data class Playlist(
+    val playlistKey: String,
+    val items: List<PlaylistItem>
+)
+
+data class PlaylistItem(
+    val duration: Int,
+    val dataSize: Int,
+    val modified: Long,
+    val creativeLabel: String,
+    val playlistKey: String,
+    val creativeKey: String,
+    val orderKey: Int
+)
