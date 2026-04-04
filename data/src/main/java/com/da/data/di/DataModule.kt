@@ -4,7 +4,9 @@ import androidx.room.Room
 import com.da.data.local.db.dao.PlaylistDao
 import com.da.data.local.db.AppDatabase
 import com.da.data.repository.PlaylistRepositoryImpl
+import com.da.data.repository.UserPreferencesRepositoryImpl
 import com.da.domain.repository.PlaylistRepository
+import com.da.domain.repository.UserPreferencesRepository
 import org.koin.dsl.module
 
 val dataModule = module {
@@ -24,6 +26,12 @@ val dataModule = module {
     single<PlaylistRepository> {
         PlaylistRepositoryImpl(
             playlistDao = get()
+        )
+    }
+
+    single<UserPreferencesRepository> {
+        UserPreferencesRepositoryImpl(
+            context = get()
         )
     }
 
