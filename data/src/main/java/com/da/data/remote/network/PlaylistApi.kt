@@ -1,6 +1,6 @@
-package com.da.data.network
+package com.da.data.remote.network
 
-import com.da.data.network.dto.ScreenResponse
+import com.da.data.remote.network.dto.ScreenResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 

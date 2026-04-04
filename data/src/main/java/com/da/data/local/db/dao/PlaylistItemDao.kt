@@ -1,4 +1,4 @@
-package com.da.data.local.dao
+package com.da.data.local.db.dao
 
 import androidx.room.Dao
 

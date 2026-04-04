@@ -1,9 +1,9 @@
 package com.da.data.di
 
-import com.da.data.network.MoshiFactory
-import com.da.data.network.OkHttpFactory
-import com.da.data.network.PlaylistApi
-import com.da.data.network.RetrofitFactory
+import com.da.data.remote.network.MoshiFactory
+import com.da.data.remote.network.OkHttpFactory
+import com.da.data.remote.network.PlaylistApi
+import com.da.data.remote.network.RetrofitFactory
 import org.koin.dsl.module
 import retrofit2.Retrofit
 

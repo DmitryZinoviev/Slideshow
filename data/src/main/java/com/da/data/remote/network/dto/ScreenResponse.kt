@@ -1,4 +1,4 @@
-package com.da.data.network.dto
+package com.da.data.remote.network.dto
 
 import com.squareup.moshi.JsonClass
 

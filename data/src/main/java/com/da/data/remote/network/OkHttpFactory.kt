@@ -1,4 +1,4 @@
-package com.da.data.network
+package com.da.data.remote.network
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

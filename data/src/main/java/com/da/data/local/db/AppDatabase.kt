@@ -2,10 +2,10 @@ package com.da.data.local.db
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.da.data.local.dao.PlaylistDao
-import com.da.data.local.dao.PlaylistItemDao
-import com.da.data.local.entity.PlaylistEntity
-import com.da.data.local.entity.PlaylistItemEntity
+import com.da.data.local.db.dao.PlaylistDao
+import com.da.data.local.db.dao.PlaylistItemDao
+import com.da.data.local.db.entity.PlaylistEntity
+import com.da.data.local.db.entity.PlaylistItemEntity
 
 @Database(
     entities = [PlaylistEntity::class, PlaylistItemEntity::class],

@@ -1,7 +1,7 @@
 package com.da.data.di
 
 import androidx.room.Room
-import com.da.data.local.dao.PlaylistDao
+import com.da.data.local.db.dao.PlaylistDao
 import com.da.data.local.db.AppDatabase
 import com.da.data.repository.PlaylistRepositoryImpl
 import com.da.domain.repository.PlaylistRepository
