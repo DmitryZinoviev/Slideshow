@@ -7,4 +7,5 @@ interface PlaylistRepository {
 
     suspend fun getRemoteScreen(screenKey: String): ScreenResult
     suspend fun getLocalScreen(screenKey: String): ScreenResult
+    suspend fun fetchScreen(screen: Screen): ScreenResult
 }

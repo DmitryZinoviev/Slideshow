@@ -3,6 +3,7 @@ package com.da.data.di
 import com.da.data.local.db.mapper.PlaylistEntityMapper
 import com.da.data.local.db.mapper.PlaylistItemEntityMapper
 import com.da.data.local.db.mapper.ScreenEntityMapper
+import com.da.data.local.db.mapper.ScreenToEntityMapper
 import com.da.data.local.db.mapper.ScreenWithPlaylistsMapper
 import com.da.data.remote.network.MoshiFactory
 import com.da.data.remote.network.OkHttpFactory
@@ -26,6 +27,7 @@ val mapperModule = module {
     single { PlaylistEntityMapper(get()) }
     single { PlaylistItemEntityMapper() }
     single { ScreenWithPlaylistsMapper() }
+    single { ScreenToEntityMapper() }
 
 
 
