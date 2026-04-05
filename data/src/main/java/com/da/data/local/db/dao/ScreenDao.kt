@@ -7,7 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import com.da.data.local.db.entity.DownloadEntity
-import com.da.data.local.db.entity.DownloadStatus
+import com.da.data.local.db.entity.DownloadStatusEntity
 import com.da.data.local.db.entity.PlaylistEntity
 import com.da.data.local.db.entity.PlaylistItemEntity
 import com.da.data.local.db.entity.ScreenEntity
@@ -54,7 +54,7 @@ interface ScreenDao {
                 DownloadEntity(
                     creativeKey = it.creativeKey!!,
                     localPath = null,
-                    status = DownloadStatus.NOT_DOWNLOADED
+                    status = DownloadStatusEntity.NOT_DOWNLOADED
                 )
             }
 

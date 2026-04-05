@@ -2,6 +2,7 @@ package com.da.slideshow.ui.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.da.data.downloader.DownloadWorkerObserver
 import com.da.data.local.db.dao.ScreenDao
 import com.da.domain.useCases.GetScreenKeyUseCase
 import com.da.domain.useCases.SaveScreenKeyUseCase
@@ -17,7 +18,8 @@ class MainViewModel(
     private val getScreenKeyUseCase: GetScreenKeyUseCase,
     private val saveScreenKeyUseCase: SaveScreenKeyUseCase,
     private val syncScreenUseCase: SyncScreenUseCase,
-    private val screenDao: ScreenDao
+    private val screenDao: ScreenDao,
+    private val downloadWorkerObserver: DownloadWorkerObserver
 ): ViewModel() {
 
     init {
@@ -56,11 +58,12 @@ class MainViewModel(
 
             MainAction.LoadAction -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    val s = screenDao.getScreens()
-                    val l = screenDao.getPlaylists()
-                    val i = screenDao.getItems()
-                    val d = screenDao.getDownloads()
-                    println("s = ${s.size}; p = ${l.size};i = ${i.size}")
+//                    val s = screenDao.getScreens()
+//                    val l = screenDao.getPlaylists()
+//                    val i = screenDao.getItems()
+//                    val d = screenDao.getDownloads()
+//                    println("s = ${s.size}; p = ${l.size};i = ${i.size}")
+                    downloadWorkerObserver.start()
                 }
 
             }

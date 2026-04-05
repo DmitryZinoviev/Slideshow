@@ -1,5 +1,6 @@
 package com.da.data.di
 
+import com.da.data.local.db.mapper.DownloadEntityMapper
 import com.da.data.local.db.mapper.PlaylistEntityMapper
 import com.da.data.local.db.mapper.PlaylistItemEntityMapper
 import com.da.data.local.db.mapper.ScreenEntityMapper
@@ -28,6 +29,7 @@ val mapperModule = module {
     single { PlaylistItemEntityMapper() }
     single { ScreenWithPlaylistsMapper() }
     single { ScreenToEntityMapper() }
+    single { DownloadEntityMapper() }
 
 
 

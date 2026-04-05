@@ -9,10 +9,10 @@ import androidx.room.PrimaryKey
 data class DownloadEntity(
     @PrimaryKey val creativeKey: String,
     val localPath: String?,
-    val status: DownloadStatus
+    val status: DownloadStatusEntity
 )
 
-enum class DownloadStatus {
+enum class DownloadStatusEntity {
     NOT_DOWNLOADED,
     DOWNLOADING,
     DOWNLOADED,

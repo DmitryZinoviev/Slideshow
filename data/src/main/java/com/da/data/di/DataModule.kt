@@ -1,10 +1,13 @@
 package com.da.data.di
 
 import androidx.room.Room
+import com.da.data.downloader.DownloadWorkerObserver
+import com.da.data.downloader.PlaylistDownloader
 import com.da.data.local.db.dao.PlaylistDao
 import com.da.data.local.db.AppDatabase
 import com.da.data.local.db.DatabaseProvider
 import com.da.data.local.db.dao.ScreenDao
+import com.da.data.local.storage.FileStorageImpl
 import com.da.data.repository.PlaylistRepositoryImpl
 import com.da.data.repository.UserPreferencesRepositoryImpl
 import com.da.domain.repository.PlaylistRepository
@@ -37,6 +40,22 @@ val dataModule = module {
             context = get()
         )
     }
+
+    single {
+        PlaylistDownloader(get(), get())
+    }
+
+    single {
+        FileStorageImpl(get())
+    }
+
+    single {
+        DownloadWorkerObserver(get(), get(), get())
+    }
+
+
+
+
 
 
     includes(networkModule, mapperModule)
