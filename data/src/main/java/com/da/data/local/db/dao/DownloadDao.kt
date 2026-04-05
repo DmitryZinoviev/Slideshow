@@ -1,0 +1,45 @@
+package com.da.data.local.db.dao
+
+import androidx.room.Dao
+import androidx.room.Query
+import androidx.room.Transaction
+import com.da.data.local.db.entity.DownloadEntity
+import com.da.data.local.db.entity.DownloadStatusEntity
+import kotlinx.coroutines.flow.Flow
+
+@Dao
+interface DownloadDao {
+    @Query("SELECT * FROM downloads")
+    fun observeAll(): Flow<List<DownloadEntity>>
+
+    @Transaction
+    @Query("SELECT * FROM downloads")
+    suspend fun getDownloads(): List<DownloadEntity>
+
+
+    @Query("UPDATE downloads SET status = :status WHERE creativeKey = :key")
+    suspend fun updateStatus(
+        key: String,
+        status: DownloadStatusEntity
+    )
+
+    @Query("""
+        UPDATE downloads 
+        SET status = :status, localPath = :path 
+        WHERE creativeKey = :key
+    """)
+    suspend fun updateStatusAndPath(
+        key: String,
+        status: DownloadStatusEntity,
+        path: String?
+    )
+
+    @Query("SELECT * FROM downloads WHERE status = :status")
+    fun observeByStatus(status: DownloadStatusEntity): Flow<List<DownloadEntity>>
+
+
+    @Transaction
+    @Query("SELECT * FROM downloads WHERE status != :status")
+    suspend fun getPendingDownloads(status: DownloadStatusEntity = DownloadStatusEntity.NOT_DOWNLOADED): List<DownloadEntity>
+
+}

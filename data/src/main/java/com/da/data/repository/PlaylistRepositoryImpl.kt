@@ -12,6 +12,8 @@ import com.da.domain.diff.ScreenDiff
 import com.da.domain.model.Screen
 import com.da.domain.model.ScreenResult
 import com.da.domain.repository.PlaylistRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class PlaylistRepositoryImpl(
     private val db: AppDatabase,
@@ -21,32 +23,34 @@ class PlaylistRepositoryImpl(
     private val screenWithPlaylistsMapper: ScreenWithPlaylistsMapper,
     private val screenToEntityMapper: ScreenToEntityMapper
 ): PlaylistRepository {
-    override suspend fun getRemoteScreen(screenKey: String): ScreenResult {
+    override suspend fun getRemoteScreen(
+        screenKey: String
+    ): ScreenResult = withContext(Dispatchers.IO) {
         try {
             val result = playlistDataSource.getPlaylist(screenKey)
             if(result is ApiResult.Success){
                 val screen = screenMapper.map(result.data)
-                return ScreenResult.Success(screen)
+                return@withContext ScreenResult.Success(screen)
             }else{
-                return ScreenResult.Error(Exception("fail"))
+                return@withContext ScreenResult.Error(Exception("fail"))
             }
         }catch (e: Exception){
-            return ScreenResult.Error(e)
+            return@withContext ScreenResult.Error(e)
         }
 
     }
 
-    override suspend fun getLocalScreen(screenKey: String): ScreenResult {
+    override suspend fun getLocalScreen(screenKey: String): ScreenResult = withContext(Dispatchers.IO) {
         try {
             val result = screenDao.getScreenWithPlaylists(screenKey)
             result?.let {
                 val screen = screenWithPlaylistsMapper.map(it)
-                return ScreenResult.Success(screen)
+                return@withContext ScreenResult.Success(screen)
             }
-            return ScreenResult.NotFound
+            return@withContext ScreenResult.NotFound
 
         } catch (e: Exception) {
-            return ScreenResult.Error(e)
+            return@withContext ScreenResult.Error(e)
         }
     }
 

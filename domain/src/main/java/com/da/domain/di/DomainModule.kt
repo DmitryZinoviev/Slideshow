@@ -1,6 +1,8 @@
 package com.da.domain.di
 
 import com.da.domain.diff.ScreenDiffCalculator
+import com.da.domain.useCases.CheckPendingDownloadUseCase
+import com.da.domain.useCases.CleanTempFilesUseCase
 import com.da.domain.useCases.GetScreenKeyUseCase
 import com.da.domain.useCases.SaveScreenKeyUseCase
 import com.da.domain.useCases.SyncScreenUseCase
@@ -10,5 +12,8 @@ val domainModule = module {
     factory { SaveScreenKeyUseCase(get()) }
     factory { GetScreenKeyUseCase(get()) }
     factory { SyncScreenUseCase(get(), get()) }
+    factory { CheckPendingDownloadUseCase(get()) }
+    factory { CleanTempFilesUseCase(get()) }
+
     single { ScreenDiffCalculator() }
 }

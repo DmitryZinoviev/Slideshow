@@ -1,15 +1,17 @@
 package com.da.data.di
 
-import androidx.room.Room
-import com.da.data.downloader.DownloadWorkerObserver
+import com.da.data.downloader.DownloadWorkerObserverImpl
 import com.da.data.downloader.PlaylistDownloader
-import com.da.data.local.db.dao.PlaylistDao
 import com.da.data.local.db.AppDatabase
 import com.da.data.local.db.DatabaseProvider
+import com.da.data.local.db.dao.DownloadDao
 import com.da.data.local.db.dao.ScreenDao
-import com.da.data.local.storage.FileStorageImpl
+import com.da.data.local.storage.FileStorage
+import com.da.data.repository.DownloadRepositoryImpl
 import com.da.data.repository.PlaylistRepositoryImpl
 import com.da.data.repository.UserPreferencesRepositoryImpl
+import com.da.domain.download.DownloadWorkerObserver
+import com.da.domain.repository.DownloadRepository
 import com.da.domain.repository.PlaylistRepository
 import com.da.domain.repository.UserPreferencesRepository
 import org.koin.dsl.module
@@ -20,8 +22,8 @@ val dataModule = module {
         DatabaseProvider.getDatabase(get())
     }
 
-    single<PlaylistDao> {
-        get<AppDatabase>().playlistDao()
+    single<DownloadDao> {
+        get<AppDatabase>().downloadDao()
     }
 
     single<ScreenDao> {
@@ -41,16 +43,21 @@ val dataModule = module {
         )
     }
 
+    single<DownloadRepository> {
+        DownloadRepositoryImpl(get(), get())
+    }
+
+
     single {
         PlaylistDownloader(get(), get())
     }
 
     single {
-        FileStorageImpl(get())
+        FileStorage(get())
     }
 
-    single {
-        DownloadWorkerObserver(get(), get(), get())
+    single<DownloadWorkerObserver> {
+        DownloadWorkerObserverImpl(get(), get())
     }
 
 

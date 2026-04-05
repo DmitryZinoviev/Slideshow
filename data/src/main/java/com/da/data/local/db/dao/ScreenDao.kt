@@ -42,11 +42,11 @@ interface ScreenDao {
         insertPlaylistItems(items)
         Log.d("DB_DEBUG", "Inserted items: ${items.size}")
 
-        val duplicates = items
-            .filter { it.creativeKey != null }
-            .groupBy { it.creativeKey }
-            .filter { it.value.size > 1 }
-            .flatMap { it.value }
+//        val duplicates = items
+//            .filter { it.creativeKey != null }
+//            .groupBy { it.creativeKey }
+//            .filter { it.value.size > 1 }
+//            .flatMap { it.value }
 
         val downloads = items
             .filter { it.creativeKey != null }
@@ -90,25 +90,6 @@ interface ScreenDao {
     @Query("SELECT * FROM playlist_items")
     suspend fun getItems(): List<PlaylistItemEntity>
 
-    @Transaction
-    @Query("SELECT * FROM downloads")
-    suspend fun getDownloads(): List<DownloadEntity>
 
-    @Query("UPDATE downloads SET status = :status WHERE creativeKey = :key")
-    suspend fun updateStatus(
-        key: String,
-        status: DownloadStatusEntity
-    )
-
-    @Query("""
-        UPDATE downloads 
-        SET status = :status, localPath = :path 
-        WHERE creativeKey = :key
-    """)
-    suspend fun updateStatusAndPath(
-        key: String,
-        status: DownloadStatusEntity,
-        path: String?
-    )
 
 }

@@ -2,6 +2,7 @@ package com.da.data.local.db
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import com.da.data.local.db.dao.DownloadDao
 import com.da.data.local.db.dao.PlaylistDao
 import com.da.data.local.db.dao.PlaylistItemDao
 import com.da.data.local.db.dao.ScreenDao
@@ -17,6 +18,8 @@ import com.da.data.local.db.entity.ScreenEntity
 abstract class AppDatabase : RoomDatabase() {
     abstract fun screenDao(): ScreenDao
     abstract fun playlistDao(): PlaylistDao
+    abstract fun downloadDao(): DownloadDao
     abstract fun playlistItemDao(): PlaylistItemDao
+
 
 }

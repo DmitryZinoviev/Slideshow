@@ -2,14 +2,14 @@ package com.da.slideshow.ui.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.da.data.downloader.DownloadWorkerObserver
+import com.da.data.downloader.DownloadWorkerObserverImpl
 import com.da.data.local.db.dao.ScreenDao
-import com.da.domain.core.ApiResult
+import com.da.domain.useCases.CheckPendingDownloadUseCase
+import com.da.domain.useCases.CleanTempFilesUseCase
 import com.da.domain.useCases.GetScreenKeyUseCase
 import com.da.domain.useCases.SaveScreenKeyUseCase
 import com.da.domain.useCases.SyncScreenUseCase
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -20,16 +20,21 @@ class MainViewModel(
     private val getScreenKeyUseCase: GetScreenKeyUseCase,
     private val saveScreenKeyUseCase: SaveScreenKeyUseCase,
     private val syncScreenUseCase: SyncScreenUseCase,
-    private val screenDao: ScreenDao,
-    private val downloadWorkerObserver: DownloadWorkerObserver
+    private val checkPendingDownloadUseCase: CheckPendingDownloadUseCase,
+    private val cleanTempFilesUseCase: CleanTempFilesUseCase
 ): ViewModel() {
 
     init {
         viewModelScope.launch {
-            val key = getScreenKeyUseCase.invoke()
+            val key = getScreenKeyUseCase()
             _state.update {
                 it.copy(screenKey = key)
             }
+        }
+
+        viewModelScope.launch {
+            cleanTempFilesUseCase()
+            checkPendingDownloadUseCase()
         }
     }
 
@@ -64,19 +69,19 @@ class MainViewModel(
 //                    val s = screenDao.getScreens()
 //                    val l = screenDao.getPlaylists()
 //                    val i = screenDao.getItems()
-                    val downloads = screenDao.getDownloads()
+                    //val downloads = screenDao.getDownloads()
 //                    println("s = ${s.size}; p = ${l.size};i = ${i.size}")
                     //downloadWorkerObserver.start()
 
-                    for (d in downloads){
-                        d.localPath?.let{ p ->
-                            withContext(Dispatchers.Main) {
-                                _state.update { it.copy(path = p) }
-                            }
-                        }
-                        delay(5000)
-
-                    }
+//                    for (d in downloads){
+//                        d.localPath?.let{ p ->
+//                            withContext(Dispatchers.Main) {
+//                                _state.update { it.copy(path = p) }
+//                            }
+//                        }
+//                        delay(5000)
+//
+//                    }
                 }
 
             }

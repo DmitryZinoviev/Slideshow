@@ -1,13 +1,13 @@
 package com.da.data.downloader
 
-import com.da.data.local.storage.FileStorageImpl
+import com.da.data.local.storage.FileStorage
 import com.da.data.remote.network.PlaylistApi
 import com.da.domain.model.Download
 import java.io.File
 
 class PlaylistDownloader(
     private val playlistApi: PlaylistApi,
-    private val fileStorage: FileStorageImpl
+    private val fileStorage: FileStorage
 
 ) {
     suspend fun download(download: Download): Result<File> {
@@ -63,5 +63,9 @@ class PlaylistDownloader(
             if (result.isSuccess) return result
         }
         return Result.failure(Exception("Failed after retries"))
+    }
+
+    suspend fun clearTempFiles(){
+        fileStorage.clearTempFiles()
     }
 }
