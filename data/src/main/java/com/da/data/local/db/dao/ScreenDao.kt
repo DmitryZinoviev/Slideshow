@@ -94,4 +94,21 @@ interface ScreenDao {
     @Query("SELECT * FROM downloads")
     suspend fun getDownloads(): List<DownloadEntity>
 
+    @Query("UPDATE downloads SET status = :status WHERE creativeKey = :key")
+    suspend fun updateStatus(
+        key: String,
+        status: DownloadStatusEntity
+    )
+
+    @Query("""
+        UPDATE downloads 
+        SET status = :status, localPath = :path 
+        WHERE creativeKey = :key
+    """)
+    suspend fun updateStatusAndPath(
+        key: String,
+        status: DownloadStatusEntity,
+        path: String?
+    )
+
 }

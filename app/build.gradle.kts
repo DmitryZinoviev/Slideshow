@@ -89,6 +89,9 @@ dependencies {
     implementation(libs.koin.android)
     implementation(libs.koin.androidx.compose)
 
+    implementation(libs.media3.exoplayer)
+    implementation(libs.media3.ui)
+
     implementation(project(":domain"))
     implementation(project(":data"))
 }

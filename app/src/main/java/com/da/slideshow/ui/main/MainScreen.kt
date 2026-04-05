@@ -1,6 +1,5 @@
 package com.da.slideshow.ui.main
 
-import android.R
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -22,8 +21,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.da.slideshow.Greeting
-import com.da.slideshow.ui.theme.SlideshowTheme
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -31,7 +28,7 @@ fun MainScreen(modifier: Modifier, viewModel: MainViewModel = koinViewModel()) {
     var screenKey by remember { mutableStateOf("") }
     val state by viewModel.state.collectAsState()
     MainView(
-        modifier, state.screenKey, state.isLoading,
+        modifier, state.screenKey, state.isLoading, state.path,
         {
             viewModel.onAction(action = MainAction.ChangeScreenKeyAction(it))
         },
@@ -49,6 +46,7 @@ fun MainView(
     modifier: Modifier,
     screenKey: String,
     isLoading: Boolean,
+    path: String,
     onScreenKeyChange: (String) -> Unit,
     onGetDbClick: () -> Unit,
     onSyncClick: (String) -> Unit
@@ -92,8 +90,18 @@ fun MainView(
             modifier = Modifier.fillMaxWidth(),
             enabled = !isLoading
         ) {
-            Text("get db")
+            Text("play")
         }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        //SmoothMediaContent(path)
+        //VideoCrossFadeLoop()
+        //SinglePlayerFadeLoop()
+        //FadingSquareDemo()
+        //MediaContent(path)
+        //BlinkingSquareAndroidView()
+
     }
 }
 
@@ -101,7 +109,7 @@ fun MainView(
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    MainView(Modifier,"", true, {}, {}){
+    MainView(Modifier,"", true, "", {}, {}){
 
 
     }

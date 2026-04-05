@@ -4,10 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.da.data.downloader.DownloadWorkerObserver
 import com.da.data.local.db.dao.ScreenDao
+import com.da.domain.core.ApiResult
 import com.da.domain.useCases.GetScreenKeyUseCase
 import com.da.domain.useCases.SaveScreenKeyUseCase
 import com.da.domain.useCases.SyncScreenUseCase
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -34,7 +36,8 @@ class MainViewModel(
     private val _state = MutableStateFlow(
         MainState(
             screenKey = "",
-            isLoading = false
+            isLoading = false,
+            path = ""
         )
     )
 
@@ -61,9 +64,19 @@ class MainViewModel(
 //                    val s = screenDao.getScreens()
 //                    val l = screenDao.getPlaylists()
 //                    val i = screenDao.getItems()
-//                    val d = screenDao.getDownloads()
+                    val downloads = screenDao.getDownloads()
 //                    println("s = ${s.size}; p = ${l.size};i = ${i.size}")
-                    downloadWorkerObserver.start()
+                    //downloadWorkerObserver.start()
+
+                    for (d in downloads){
+                        d.localPath?.let{ p ->
+                            withContext(Dispatchers.Main) {
+                                _state.update { it.copy(path = p) }
+                            }
+                        }
+                        delay(5000)
+
+                    }
                 }
 
             }

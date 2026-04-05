@@ -10,7 +10,7 @@ object DatabaseProvider {
     private var INSTANCE: AppDatabase? = null
 
     fun getDatabase(context: Context): AppDatabase {
-        val res = context.deleteDatabase("app_database")
+        //val res = context.deleteDatabase("app_database")
         return INSTANCE ?: synchronized(this) {
             val instance = Room.databaseBuilder(
                 context.applicationContext,
