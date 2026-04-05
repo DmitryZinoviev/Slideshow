@@ -24,7 +24,8 @@ class DownloadWorkerObserverImpl(
      * check is there pending download in entity
      * download proc have 3 retry
      */
-    override suspend fun checkPendingDownloads() = withContext(Dispatchers.IO) {
+    override suspend fun checkPendingDownloads(): Unit = withContext(Dispatchers.IO) {
+        
         try {
             val downloads = downloadRepository.getPendingDownloads()
             for (download in downloads){

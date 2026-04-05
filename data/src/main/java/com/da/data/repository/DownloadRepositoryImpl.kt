@@ -6,11 +6,9 @@ import com.da.data.local.db.mapper.DownloadEntityMapper
 import com.da.data.local.db.mapper.toEntity
 import com.da.domain.model.Download
 import com.da.domain.model.DownloadStatus
-import com.da.domain.model.ScreenResult
 import com.da.domain.repository.DownloadRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import okio.Path
 
 
 class DownloadRepositoryImpl(
@@ -38,7 +36,21 @@ class DownloadRepositoryImpl(
         status: DownloadStatus,
         path: String?
     ): Unit = withContext(Dispatchers.IO) {
-        downloadDao.updateStatusAndPath(key, status.toEntity(), path)
-        Log.d("updateDownload","Update $key, $status, ${path.orEmpty()}")
+        try {
+            downloadDao.updateStatusAndPath(key, status.toEntity(), path)
+            Log.d("updateDownload","Update $key, $status, ${path.orEmpty()}")
+        }catch (e: Exception){
+            Log.e("updateDownload","Fail $key, $status, ${path.orEmpty()} ${e.toString()}")
+        }
+    }
+
+    override suspend fun getDownloads(keys: List<String>): List<Download> = withContext(Dispatchers.IO) {
+        try {
+            val downloadEntities = downloadDao.getDownloads(keys, DownloadStatus.DOWNLOADED)
+            return@withContext downloadEntities.map(downloadEntityMapper::map)
+        }catch (e: Exception){
+            Log.e("getDownloads","Fail $keys; ${e.toString()}")
+        }
+        emptyList()
     }
 }

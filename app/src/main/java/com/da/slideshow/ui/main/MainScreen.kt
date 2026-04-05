@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.da.slideshow.ui.main.component.MediaContent
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -95,11 +96,7 @@ fun MainView(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        //SmoothMediaContent(path)
-        //VideoCrossFadeLoop()
-        //SinglePlayerFadeLoop()
-        //FadingSquareDemo()
-        //MediaContent(path)
+        MediaContent(path)
         //BlinkingSquareAndroidView()
 
     }

@@ -5,6 +5,7 @@ import androidx.room.Query
 import androidx.room.Transaction
 import com.da.data.local.db.entity.DownloadEntity
 import com.da.data.local.db.entity.DownloadStatusEntity
+import com.da.domain.model.DownloadStatus
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -16,6 +17,9 @@ interface DownloadDao {
     @Query("SELECT * FROM downloads")
     suspend fun getDownloads(): List<DownloadEntity>
 
+    @Transaction
+    @Query("SELECT * FROM downloads WHERE status=:status and creativeKey IN (:keys)")
+    suspend fun getDownloads(keys: List<String>, status: DownloadStatus): List<DownloadEntity>
 
     @Query("UPDATE downloads SET status = :status WHERE creativeKey = :key")
     suspend fun updateStatus(
