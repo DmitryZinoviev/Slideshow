@@ -37,7 +37,7 @@ class SyncScreenUseCase(
 
         val diffResult = diffCalculator.calculate(local, remote)
 
-        playlistRepository.
+        //playlistRepository.
 
 
         return FetchResult.Error

@@ -9,6 +9,6 @@ import org.koin.dsl.module
 val domainModule = module {
     factory { SaveScreenKeyUseCase(get()) }
     factory { GetScreenKeyUseCase(get()) }
-    factory { SyncScreenUseCase(get()) }
+    factory { SyncScreenUseCase(get(), get()) }
     single { ScreenDiffCalculator() }
 }

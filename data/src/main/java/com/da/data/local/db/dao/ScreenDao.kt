@@ -1,10 +1,13 @@
 package com.da.data.local.db.dao
 
+import android.util.Log
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
+import com.da.data.local.db.entity.DownloadEntity
+import com.da.data.local.db.entity.DownloadStatus
 import com.da.data.local.db.entity.PlaylistEntity
 import com.da.data.local.db.entity.PlaylistItemEntity
 import com.da.data.local.db.entity.ScreenEntity
@@ -24,6 +27,10 @@ interface ScreenDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPlaylistItems(items: List<PlaylistItemEntity>)
 
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertDownloads(items: List<DownloadEntity>)
+
+
     @Transaction
     suspend fun insertFullScreen(
         screen: ScreenEntity,
@@ -33,6 +40,37 @@ interface ScreenDao {
         insertScreen(screen)
         insertPlaylists(playlists)
         insertPlaylistItems(items)
+        Log.d("DB_DEBUG", "Inserted items: ${items.size}")
+
+        val duplicates = items
+            .filter { it.creativeKey != null }
+            .groupBy { it.creativeKey }
+            .filter { it.value.size > 1 }
+            .flatMap { it.value }
+
+        val downloads = items
+            .filter { it.creativeKey != null }
+            .map {
+                DownloadEntity(
+                    creativeKey = it.creativeKey!!,
+                    localPath = null,
+                    status = DownloadStatus.NOT_DOWNLOADED
+                )
+            }
+
+        Log.d("DB_DEBUG", "Downloads to insert: ${downloads.size}")
+
+        try {
+
+
+            insertDownloads(downloads)
+        }catch (e: Exception){
+            Log.e("DB_DEBUG", e.toString())
+        }
+        finally {
+            Log.d("DB_DEBUG", "done")
+
+        }
     }
 
     @Transaction
@@ -51,5 +89,9 @@ interface ScreenDao {
     @Transaction
     @Query("SELECT * FROM playlist_items")
     suspend fun getItems(): List<PlaylistItemEntity>
+
+    @Transaction
+    @Query("SELECT * FROM downloads")
+    suspend fun getDownloads(): List<DownloadEntity>
 
 }

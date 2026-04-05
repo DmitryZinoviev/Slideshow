@@ -59,13 +59,24 @@ class MainViewModel(
                     val s = screenDao.getScreens()
                     val l = screenDao.getPlaylists()
                     val i = screenDao.getItems()
+                    val d = screenDao.getDownloads()
                     println("s = ${s.size}; p = ${l.size};i = ${i.size}")
                 }
 
             }
             is MainAction.SyncAction -> {
-                viewModelScope.launch(Dispatchers.IO) {
-                    syncScreenUseCase.invoke(action.screenKey)
+                viewModelScope.launch {
+                    _state.update {
+                        it.copy(isLoading = true)
+                    }
+                    withContext(Dispatchers.IO) {
+                        syncScreenUseCase.invoke(action.screenKey)
+                    }
+
+                    _state.update {
+                        it.copy(isLoading = false)
+                    }
+
                 }
             }
         }

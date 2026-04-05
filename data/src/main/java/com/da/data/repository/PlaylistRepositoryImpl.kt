@@ -43,7 +43,7 @@ class PlaylistRepositoryImpl(
                 val screen = screenWithPlaylistsMapper.map(it)
                 return ScreenResult.Success(screen)
             }
-            return ScreenResult.Error(Exception("Not found"))
+            return ScreenResult.NotFound
 
         } catch (e: Exception) {
             return ScreenResult.Error(e)
@@ -59,5 +59,5 @@ class PlaylistRepositoryImpl(
             return ScreenResult.Error(e)
         }
     }
-    
+
 }

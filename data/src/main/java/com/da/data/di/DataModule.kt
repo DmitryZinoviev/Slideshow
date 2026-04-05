@@ -3,6 +3,7 @@ package com.da.data.di
 import androidx.room.Room
 import com.da.data.local.db.dao.PlaylistDao
 import com.da.data.local.db.AppDatabase
+import com.da.data.local.db.DatabaseProvider
 import com.da.data.local.db.dao.ScreenDao
 import com.da.data.repository.PlaylistRepositoryImpl
 import com.da.data.repository.UserPreferencesRepositoryImpl
@@ -13,11 +14,7 @@ import org.koin.dsl.module
 val dataModule = module {
 
     single<AppDatabase> {
-        Room.databaseBuilder(
-            get(),
-            AppDatabase::class.java,
-            "app_db"
-        ).build()
+        DatabaseProvider.getDatabase(get())
     }
 
     single<PlaylistDao> {
@@ -30,7 +27,9 @@ val dataModule = module {
 
 
     single<PlaylistRepository> {
-        PlaylistRepositoryImpl(get(), get(), get(), get())
+
+        PlaylistRepositoryImpl(get(), get(), get(),
+        get(), get(), get())
     }
 
     single<UserPreferencesRepository> {

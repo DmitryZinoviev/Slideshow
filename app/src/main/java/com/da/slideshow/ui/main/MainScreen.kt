@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -29,9 +30,11 @@ import org.koin.androidx.compose.koinViewModel
 fun MainScreen(modifier: Modifier, viewModel: MainViewModel = koinViewModel()) {
     var screenKey by remember { mutableStateOf("") }
     val state by viewModel.state.collectAsState()
-    MainView(modifier, state.screenKey, {
-        viewModel.onAction(action = MainAction.ChangeScreenKeyAction(it))
-    },
+    MainView(
+        modifier, state.screenKey, state.isLoading,
+        {
+            viewModel.onAction(action = MainAction.ChangeScreenKeyAction(it))
+        },
         {
             viewModel.onAction(MainAction.LoadAction)
         }) {
@@ -45,6 +48,7 @@ fun MainScreen(modifier: Modifier, viewModel: MainViewModel = koinViewModel()) {
 fun MainView(
     modifier: Modifier,
     screenKey: String,
+    isLoading: Boolean,
     onScreenKeyChange: (String) -> Unit,
     onGetDbClick: () -> Unit,
     onSyncClick: (String) -> Unit
@@ -56,33 +60,40 @@ fun MainView(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
+        if (isLoading) {
+            CircularProgressIndicator()
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+
         TextField(
             value = screenKey,
             onValueChange = onScreenKeyChange,
             placeholder = { Text("ScreenKey") },
             singleLine = true,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            enabled = !isLoading
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
-            onClick = {onSyncClick(screenKey)},
-            modifier = Modifier.fillMaxWidth()
+            onClick = { onSyncClick(screenKey) },
+            modifier = Modifier.fillMaxWidth(),
+            enabled = !isLoading
         ) {
             Text("Sync")
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-
         Button(
             onClick = onGetDbClick,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            enabled = !isLoading
         ) {
             Text("get db")
         }
-
     }
 }
 
@@ -90,7 +101,7 @@ fun MainView(
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    MainView(Modifier,"", {}, {}){
+    MainView(Modifier,"", true, {}, {}){
 
 
     }
