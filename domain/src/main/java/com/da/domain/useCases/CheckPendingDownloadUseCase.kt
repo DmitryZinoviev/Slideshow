@@ -7,6 +7,6 @@ class CheckPendingDownloadUseCase(
 ) {
     suspend operator fun invoke() {
         downloadRepository.checkPendingDownloads()
-        //downloadWorker.checkPendingDownloads()
+
     }
 }
