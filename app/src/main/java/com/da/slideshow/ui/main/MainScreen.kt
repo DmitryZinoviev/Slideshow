@@ -89,16 +89,6 @@ fun MainView(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Button(
-            onClick = onGetDbClick,
-            modifier = Modifier.fillMaxWidth(),
-            enabled = !blockScreenKeyUpdate
-        ) {
-            Text("play")
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
 
         PreviewPlaylist(list)
     }

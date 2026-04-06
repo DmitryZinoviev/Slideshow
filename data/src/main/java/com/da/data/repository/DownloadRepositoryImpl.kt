@@ -19,6 +19,7 @@ import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import kotlinx.coroutines.withContext
 import java.io.File
+import kotlin.onSuccess
 
 
 class DownloadRepositoryImpl(
@@ -28,19 +29,34 @@ class DownloadRepositoryImpl(
     private val downloadWorker: DownloadWorker
 ) : DownloadRepository {
 
-    override suspend fun getPendingDownloads(): List<Download> = withContext(Dispatchers.IO) {
-        val result = mutableListOf<Download>()
+    override suspend fun checkPendingDownloads(): Unit = withContext(Dispatchers.IO) {
+
         try {
             val pendingDownloads = downloadDao.getPendingDownloads()
             for (d in pendingDownloads) {
-                val download = downloadEntityMapper.map(d)
-                result.add(download)
-            }
 
+                val res = download(d)
+                res.onSuccess { file ->
+                    downloadDao.updateStatusAndPath(
+                        d.creativeKey,
+                        status = DownloadStatusEntity.DOWNLOADED,
+                        path = file.path
+                    )
+                }
+                    .getOrElse {
+                        downloadDao.updateStatusAndPath(
+                            d.creativeKey,
+                            status = DownloadStatusEntity.ERROR,
+                            path = null
+                        )
+                    }
+
+            }
+            updateScreenAfterDownload()
         } catch (e: Exception) {
             Log.e("DownloadRepositoryImpl", e.toString())
         }
-        result
+
     }
 
     override suspend fun updateDownload(

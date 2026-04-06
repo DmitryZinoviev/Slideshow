@@ -64,31 +64,10 @@ class MainViewModel(
 
             is PlaylistForReplayResult.Success -> {
                 _state.update { it.copy(list = result.playlistForReplay.items) }
-                //loop(result.playlistForReplay)
             }
         }
     }
 
-//    private suspend fun loop(playlistForReplay: PlaylistForReplay) {
-//        if (!isPlaying) {
-//            isPlaying = true
-//
-//            while (isPlaying) {
-//                for (i in playlistForReplay.items){
-//                    _state.update { it.copy(path = i.path) }
-//                    delay(i.fadeDuration.seconds)
-//                }
-//            }
-//        }
-//
-//    }
-
-
-    private fun stopReplay() {
-        if (isPlaying) {
-            isPlaying = false
-        }
-    }
 
 
     private val _state = MutableStateFlow(

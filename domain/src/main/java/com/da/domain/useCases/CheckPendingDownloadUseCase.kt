@@ -1,11 +1,12 @@
 package com.da.domain.useCases
 
-import com.da.domain.download.DownloadWorker
+import com.da.domain.repository.DownloadRepository
 
 class CheckPendingDownloadUseCase(
-    private val downloadWorker: DownloadWorker
+    private val downloadRepository: DownloadRepository
 ) {
     suspend operator fun invoke() {
-        downloadWorker.checkPendingDownloads()
+        downloadRepository.checkPendingDownloads()
+        //downloadWorker.checkPendingDownloads()
     }
 }
