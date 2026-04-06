@@ -1,6 +1,8 @@
 package com.da.data.local.db.dao
 
 import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import com.da.data.local.db.entity.DownloadEntity
@@ -10,6 +12,8 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface DownloadDao {
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertDownloads(items: List<DownloadEntity>): List<DownloadEntity>
     @Query("SELECT * FROM downloads")
     fun observeAll(): Flow<List<DownloadEntity>>
 

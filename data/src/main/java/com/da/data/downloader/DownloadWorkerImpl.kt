@@ -1,20 +1,21 @@
 package com.da.data.downloader
 
 import android.util.Log
-import com.da.domain.download.DownloadWorkerObserver
+import com.da.domain.download.DownloadWorker
+import com.da.domain.model.Download
 import com.da.domain.model.DownloadStatus
 import com.da.domain.repository.DownloadRepository
+import com.da.domain.repository.PlaylistRepository
+import com.da.domain.repository.UserPreferencesRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.io.File
 
 
-
-
-class DownloadWorkerObserverImpl(
-    private val downloadRepository: DownloadRepository,
+class DownloadWorkerImpl(
     private val playlistDownloader: PlaylistDownloader
 
-) : DownloadWorkerObserver {
+) : DownloadWorker {
 
     override suspend fun clearTempFiles() = withContext(Dispatchers.IO) {
         playlistDownloader.clearTempFiles()
@@ -39,6 +40,10 @@ class DownloadWorkerObserverImpl(
         }catch (e: Exception){
             Log.e("DownloadWorkerObserver", e.toString())
         }
+    }
+
+    suspend fun download(download: Download): Result<File> {
+        return playlistDownloader.downloadWithRetry(download)
     }
 
 

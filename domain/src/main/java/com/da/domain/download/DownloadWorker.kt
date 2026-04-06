@@ -1,7 +1,10 @@
 package com.da.domain.download
 
+import com.da.domain.model.Download
+import java.io.File
 
-interface DownloadWorkerObserver {
+
+interface DownloadWorker {
     suspend fun clearTempFiles()
 
     /**
@@ -9,4 +12,8 @@ interface DownloadWorkerObserver {
      * download proc have 3 retry
      */
     suspend fun checkPendingDownloads()
+
+    suspend fun download(download: Download): Result<File>
+
+
 }

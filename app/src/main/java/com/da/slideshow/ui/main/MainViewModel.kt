@@ -2,8 +2,6 @@ package com.da.slideshow.ui.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.da.data.downloader.DownloadWorkerObserverImpl
-import com.da.data.local.db.dao.ScreenDao
 import com.da.domain.model.PlaylistForReplay
 import com.da.domain.model.PlaylistForReplayResult
 import com.da.domain.useCases.CheckPendingDownloadUseCase

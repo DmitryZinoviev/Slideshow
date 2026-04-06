@@ -1,11 +1,11 @@
 package com.da.domain.useCases
 
-import com.da.domain.download.DownloadWorkerObserver
+import com.da.domain.download.DownloadWorker
 
 class CleanTempFilesUseCase(
-    private val downloadWorkerObserver: DownloadWorkerObserver
+    private val downloadWorker: DownloadWorker
 ) {
     suspend operator fun invoke() {
-        downloadWorkerObserver.clearTempFiles()
+        downloadWorker.clearTempFiles()
     }
 }

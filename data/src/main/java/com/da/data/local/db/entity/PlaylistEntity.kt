@@ -20,7 +20,8 @@ import androidx.room.PrimaryKey
 data class PlaylistEntity(
     @PrimaryKey
     val playlistKey: String,
-    val screenKey: String
+    val screenKey: String,
+    val isDownloaded: Boolean
 )
 
 

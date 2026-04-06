@@ -7,5 +7,7 @@ import androidx.room.PrimaryKey
 data class ScreenEntity(
     @PrimaryKey
     val screenKey: String,
-    val modified: Long?
+    val modified: Long?,
+    val isDownloaded: Boolean
+
 )

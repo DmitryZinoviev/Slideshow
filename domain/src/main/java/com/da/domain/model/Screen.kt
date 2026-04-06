@@ -4,7 +4,11 @@ data class Screen(
     val screenKey: String,
     val playlists: List<Playlist>,
     val modified: Long
-)
+) {
+    fun getAllPlaylistItems(): List<PlaylistItem> {
+        return playlists.flatMap { it.items }.map { it }
+    }
+}
 
 data class Playlist(
     val playlistKey: String,

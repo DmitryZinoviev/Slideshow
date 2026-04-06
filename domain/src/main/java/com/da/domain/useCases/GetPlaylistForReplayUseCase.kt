@@ -24,8 +24,7 @@ class GetPlaylistForReplayUseCase(
 
             if (screenResult is ScreenResult.Success) {
                 val screen = screenResult.screen
-                val creativeKeys = screen.playlists
-                    .flatMap { it.items }
+                val creativeKeys = screen.getAllPlaylistItems()
                     .map { it.creativeKey }
                     .distinct()
                 val downloads = downloadRepository.getDownloads(creativeKeys)
