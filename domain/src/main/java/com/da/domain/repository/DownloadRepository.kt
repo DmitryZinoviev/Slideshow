@@ -8,5 +8,5 @@ interface DownloadRepository{
     suspend fun getPendingDownloads(): List<Download>
     suspend fun updateDownload(key: String, status: DownloadStatus, path: String?)
     suspend fun getDownloads(keys: List<String>): List<Download>
-    suspend fun downloadScreen(screenKey: String): Result<Int>
+    suspend fun downloadScreen(screenKey: String): Result<Pair<Int,Int>>
 }

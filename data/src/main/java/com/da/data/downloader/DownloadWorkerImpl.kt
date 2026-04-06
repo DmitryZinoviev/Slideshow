@@ -27,22 +27,22 @@ class DownloadWorkerImpl(
      */
     override suspend fun checkPendingDownloads(): Unit = withContext(Dispatchers.IO) {
         
-        try {
-            val downloads = downloadRepository.getPendingDownloads()
-            for (download in downloads){
-                val res = playlistDownloader.downloadWithRetry(download)
-                res.onSuccess {
-                    downloadRepository.updateDownload(download.creativeKey, DownloadStatus.DOWNLOADED, it.path)
-                }.onFailure {
-                    downloadRepository.updateDownload(download.creativeKey, DownloadStatus.ERROR, null)
-                }
-            }
-        }catch (e: Exception){
-            Log.e("DownloadWorkerObserver", e.toString())
-        }
+//        try {
+//            val downloads = downloadRepository.getPendingDownloads()
+//            for (download in downloads){
+//                val res = playlistDownloader.downloadWithRetry(download)
+//                res.onSuccess {
+//                    downloadRepository.updateDownload(download.creativeKey, DownloadStatus.DOWNLOADED, it.path)
+//                }.onFailure {
+//                    downloadRepository.updateDownload(download.creativeKey, DownloadStatus.ERROR, null)
+//                }
+//            }
+//        }catch (e: Exception){
+//            Log.e("DownloadWorkerObserver", e.toString())
+//        }
     }
 
-    suspend fun download(download: Download): Result<File> {
+    override suspend fun download(download: Download): Result<File> {
         return playlistDownloader.downloadWithRetry(download)
     }
 

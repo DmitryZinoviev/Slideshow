@@ -12,6 +12,11 @@ import com.da.domain.model.Download
 import com.da.domain.model.DownloadStatus
 import com.da.domain.repository.DownloadRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withPermit
 import kotlinx.coroutines.withContext
 import java.io.File
 
@@ -62,42 +67,66 @@ class DownloadRepositoryImpl(
             emptyList()
         }
 
-    override suspend fun downloadScreen(screenKey: String): Result<Int> {
-        val screen = screenDao.getScreenWithPlaylists(screenKey) ?: return Result.failure(
-            Exception(
-                "cant load data"
-            )
-        )
-//        val duplicates = items
-//            .filter { it.creativeKey != null }
-//            .groupBy { it.creativeKey }
-//            .filter { it.value.size > 1 }
-//            .flatMap { it.value }
-        val playlistItems = screen.playlists.flatMap { it.items }.map { it }
-        val downloads = playlistItems
-            .filter { it.creativeKey != null }
-            .map {
-                DownloadEntity(
-                    creativeKey = it.creativeKey!!,
-                    localPath = null,
-                    status = DownloadStatusEntity.NOT_DOWNLOADED
-                )
-            }
-        val downloadEntities = downloadDao.insertDownloads(downloads)
-        var successCount = 0
-        for(d in downloadEntities){
-            download(d).onSuccess {
-                successCount++
-                downloadDao.updateStatusAndPath(
-                    d.creativeKey,
-                    status = DownloadStatusEntity.DOWNLOADED,
-                    path = it.path
-                )
-            }
 
+    /**
+     * download 3 items simultaneously
+     * @return Result<Pair<Int,Int>> first success count, amount of downloads
+     */
+    override suspend fun downloadScreen(screenKey: String): Result<Pair<Int,Int>> =
+        withContext(Dispatchers.IO) {
+            coroutineScope {
+                val screen = screenDao.getScreenWithPlaylists(screenKey)
+                    ?: return@coroutineScope Result.failure(Exception("cant load data"))
+
+                val playlistItems = screen.playlists.flatMap { it.items }
+
+                val downloads = playlistItems
+                    .filter { it.creativeKey != null }
+                    .distinctBy { it.creativeKey } // бонус — прибираємо дублікати
+                    .map {
+                        DownloadEntity(
+                            creativeKey = it.creativeKey!!,
+                            localPath = null,
+                            status = DownloadStatusEntity.NOT_DOWNLOADED
+                        )
+                    }
+
+                downloadDao.insertDownloads(downloads)
+
+                val downloadEntities = downloadDao.getDownloads(
+                    downloads.map { it.creativeKey }.distinct(),
+                    DownloadStatus.NOT_DOWNLOADED)
+
+                val semaphore = Semaphore(3)
+
+                val jobs = downloadEntities.map { entity ->
+                    async {
+                        semaphore.withPermit {
+                            val res = download(entity)
+                                res.onSuccess { file ->
+                                    downloadDao.updateStatusAndPath(
+                                        entity.creativeKey,
+                                        status = DownloadStatusEntity.DOWNLOADED,
+                                        path = file.path
+                                    )
+                                }
+                                .getOrElse {
+                                    downloadDao.updateStatusAndPath(
+                                        entity.creativeKey,
+                                        status = DownloadStatusEntity.ERROR,
+                                        path = null
+                                    )
+                                }
+                            return@async if (res.isSuccess) 1 else 0
+                        }
+                    }
+                }
+
+                val successCount = jobs.awaitAll().sum()
+
+                Result.success(Pair(successCount, downloadEntities.count()))
+            }
         }
-        return Result.success(successCount)
-    }
 
     private suspend fun download(downloadEntity: DownloadEntity): Result<File> {
         val download = downloadEntityMapper.map(downloadEntity)

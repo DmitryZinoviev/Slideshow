@@ -44,7 +44,12 @@ val dataModule = module {
     }
 
     single<DownloadRepository> {
-        DownloadRepositoryImpl(get(), get())
+        DownloadRepositoryImpl(
+            get(),
+            get(),
+            get(),
+            get()
+        )
     }
 
 
@@ -57,7 +62,7 @@ val dataModule = module {
     }
 
     single<DownloadWorker> {
-        DownloadWorkerImpl(get(), get())
+        DownloadWorkerImpl(get())
     }
 
 

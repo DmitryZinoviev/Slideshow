@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface DownloadDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertDownloads(items: List<DownloadEntity>): List<DownloadEntity>
+    suspend fun insertDownloads(items: List<DownloadEntity>)
     @Query("SELECT * FROM downloads")
     fun observeAll(): Flow<List<DownloadEntity>>
 
