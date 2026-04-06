@@ -12,6 +12,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -21,7 +22,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.da.slideshow.ui.main.component.MediaContent
+import com.da.domain.model.PlaylistItemForReplay
+import com.da.slideshow.ui.main.component.PreviewPlaylist
+import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -29,14 +32,14 @@ fun MainScreen(modifier: Modifier, viewModel: MainViewModel = koinViewModel()) {
     var screenKey by remember { mutableStateOf("") }
     val state by viewModel.state.collectAsState()
     MainView(
-        modifier, state.screenKey, state.isLoading, state.path,
+        modifier, state.screenKey, state.blockScreenKeyUpdate, state.list,
         {
             viewModel.onAction(action = MainAction.ChangeScreenKeyAction(it))
         },
         {
-            viewModel.onAction(MainAction.LoadAction)
+
         }) {
-        viewModel.onAction(MainAction.SyncAction(it))
+        viewModel.onAction(MainAction.FetchScreenAction(it))
 
     }
 
@@ -46,8 +49,8 @@ fun MainScreen(modifier: Modifier, viewModel: MainViewModel = koinViewModel()) {
 fun MainView(
     modifier: Modifier,
     screenKey: String,
-    isLoading: Boolean,
-    path: String,
+    blockScreenKeyUpdate: Boolean,
+    list: List<PlaylistItemForReplay>,
     onScreenKeyChange: (String) -> Unit,
     onGetDbClick: () -> Unit,
     onSyncClick: (String) -> Unit
@@ -60,7 +63,7 @@ fun MainView(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        if (isLoading) {
+        if (blockScreenKeyUpdate) {
             CircularProgressIndicator()
             Spacer(modifier = Modifier.height(16.dp))
         }
@@ -71,7 +74,7 @@ fun MainView(
             placeholder = { Text("ScreenKey") },
             singleLine = true,
             modifier = Modifier.fillMaxWidth(),
-            enabled = !isLoading
+            enabled = !blockScreenKeyUpdate
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -79,7 +82,7 @@ fun MainView(
         Button(
             onClick = { onSyncClick(screenKey) },
             modifier = Modifier.fillMaxWidth(),
-            enabled = !isLoading
+            enabled = !blockScreenKeyUpdate
         ) {
             Text("Sync")
         }
@@ -89,16 +92,15 @@ fun MainView(
         Button(
             onClick = onGetDbClick,
             modifier = Modifier.fillMaxWidth(),
-            enabled = !isLoading
+            enabled = !blockScreenKeyUpdate
         ) {
             Text("play")
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        MediaContent(path)
-        //BlinkingSquareAndroidView()
 
+        PreviewPlaylist(list)
     }
 }
 
@@ -106,7 +108,7 @@ fun MainView(
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    MainView(Modifier,"", true, "", {}, {}){
+    MainView(Modifier,"", true, emptyList(), {}, {}){
 
 
     }

@@ -6,20 +6,17 @@ import com.da.domain.model.PlaylistItemForReplay
 import com.da.domain.model.ScreenResult
 import com.da.domain.repository.DownloadRepository
 import com.da.domain.repository.PlaylistRepository
-import com.da.domain.repository.UserPreferencesRepository
 
 /**
  * Get last downloaded playlist
  * all playlist will be presented in list with order from screen
  */
 class GetPlaylistForReplayUseCase(
-    private val userPreferencesRepository: UserPreferencesRepository,
-    private val playlistRepository: PlaylistRepository,
+        private val playlistRepository: PlaylistRepository,
     private val downloadRepository: DownloadRepository
 ) {
-    suspend operator fun invoke(): PlaylistForReplayResult {
-        val screenKey = userPreferencesRepository.getLastPlaylistKey()
-        if (!screenKey.isNullOrEmpty()) {
+    suspend operator fun invoke(screenKey: String): PlaylistForReplayResult {
+        if (screenKey.isNotEmpty()) {
             val screenResult = playlistRepository.getLocalScreen(screenKey)
 
             if (screenResult is ScreenResult.Success) {
@@ -40,7 +37,7 @@ class GetPlaylistForReplayUseCase(
                                     order = order++,
                                     path = it,
                                     isVideo = it.isVideoFile(),
-                                    fadeDuration = i.duration
+                                    durationSec = i.duration
                                 )
                             )
                         }

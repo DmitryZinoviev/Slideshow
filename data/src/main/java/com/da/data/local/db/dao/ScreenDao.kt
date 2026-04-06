@@ -54,5 +54,16 @@ interface ScreenDao {
     suspend fun getItems(): List<PlaylistItemEntity>
 
 
+    @Query("""
+        UPDATE screens
+        SET isDownloaded = 1
+        WHERE screenKey IN (
+            SELECT p.screenKey
+            FROM playlists p
+            GROUP BY p.screenKey
+            HAVING SUM(CASE WHEN p.isDownloaded = 0 THEN 1 ELSE 0 END) = 0
+        )
+    """)
+    suspend fun updateScreensIfAllPlaylistsDownloaded()
 
 }

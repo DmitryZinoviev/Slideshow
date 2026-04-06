@@ -14,7 +14,8 @@ class PlaylistEntityMapper(
     ): Playlist {
         return Playlist(
             playlistKey = playlist.playlistKey,
-            items = items.map(itemMapper::map)
+            items = items.map(itemMapper::map),
+            isDownload = playlist.isDownloaded
         )
     }
 }

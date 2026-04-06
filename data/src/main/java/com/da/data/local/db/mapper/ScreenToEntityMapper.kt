@@ -11,13 +11,15 @@ class ScreenToEntityMapper{
 
         val screenEntity = ScreenEntity(
             screenKey = from.screenKey,
-            modified = from.modified
+            modified = from.modified,
+            isDownloaded = from.isDownload
         )
 
         val playlists = from.playlists.map { playlist ->
             PlaylistEntity(
                 playlistKey = playlist.playlistKey,
-                screenKey = from.screenKey
+                screenKey = from.screenKey,
+                isDownloaded = playlist.isDownload
             )
         }
 

@@ -3,7 +3,8 @@ package com.da.domain.model
 data class Screen(
     val screenKey: String,
     val playlists: List<Playlist>,
-    val modified: Long
+    val modified: Long,
+    val isDownload: Boolean
 ) {
     fun getAllPlaylistItems(): List<PlaylistItem> {
         return playlists.flatMap { it.items }.map { it }
@@ -12,7 +13,8 @@ data class Screen(
 
 data class Playlist(
     val playlistKey: String,
-    val items: List<PlaylistItem>
+    val items: List<PlaylistItem>,
+    val isDownload: Boolean
 )
 
 data class PlaylistItem(

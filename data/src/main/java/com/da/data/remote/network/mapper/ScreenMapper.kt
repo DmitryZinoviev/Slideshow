@@ -13,7 +13,8 @@ class ScreenMapper(
             playlists = from.playlists
                 ?.mapNotNull { it?.let(playlistMapper::map) }
                 .orEmpty(),
-            modified = from.modified ?: 0L
+            modified = from.modified ?: 0L,
+            isDownload = false
         )
     }
 }

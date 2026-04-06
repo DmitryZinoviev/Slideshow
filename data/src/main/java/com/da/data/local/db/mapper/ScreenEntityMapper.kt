@@ -25,7 +25,8 @@ class ScreenEntityMapper(
         return Screen(
             screenKey = screen.screenKey,
             playlists = mappedPlaylists,
-            modified = screen.modified ?: 0L
+            modified = screen.modified ?: 0L,
+            isDownload = screen.isDownloaded
         )
     }
 }

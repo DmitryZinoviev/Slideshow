@@ -6,13 +6,16 @@ import com.da.domain.repository.DownloadRepository
 class DownloadScreenPlaylistsUseCase(
     private val downloadRepository: DownloadRepository
 ) {
-    suspend fun invoke(screenKey: String): DownloadResult{
+    suspend operator fun invoke(screenKey: String): DownloadResult{
         downloadRepository.downloadScreen(screenKey).onSuccess {
             val (count, totalCount) = it
-            return when(count){
-                0-> DownloadResult.Error
-                else-> if(count==totalCount) DownloadResult.Complete else DownloadResult.Partial(count, totalCount)
-            }
+            return if(count==totalCount)
+                DownloadResult.Complete
+            else if(count == 0)
+                DownloadResult.Error
+            else
+                DownloadResult.Partial(count, totalCount)
+
         }.onFailure {
             return DownloadResult.Error
         }

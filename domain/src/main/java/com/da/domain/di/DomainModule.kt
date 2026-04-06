@@ -16,7 +16,7 @@ val domainModule = module {
     factory { SyncScreenUseCase(get(), get()) }
     factory { CheckPendingDownloadUseCase(get()) }
     factory { CleanTempFilesUseCase(get()) }
-    factory { GetPlaylistForReplayUseCase(get(), get(), get()) }
+    factory { GetPlaylistForReplayUseCase(get(), get()) }
     factory { DownloadScreenPlaylistsUseCase(get()) }
 
     single { ScreenDiffCalculator() }

@@ -103,6 +103,7 @@ class DownloadRepositoryImpl(
                     async {
                         semaphore.withPermit {
                             val res = download(entity)
+
                                 res.onSuccess { file ->
                                     downloadDao.updateStatusAndPath(
                                         entity.creativeKey,
@@ -124,9 +125,18 @@ class DownloadRepositoryImpl(
 
                 val successCount = jobs.awaitAll().sum()
 
+                updateScreenAfterDownload()
+
                 Result.success(Pair(successCount, downloadEntities.count()))
             }
         }
+
+    /**
+     * will update all screens where playlist downloaded
+     */
+    private suspend fun updateScreenAfterDownload(){
+        screenDao.updateScreensIfAllPlaylistsDownloaded()
+    }
 
     private suspend fun download(downloadEntity: DownloadEntity): Result<File> {
         val download = downloadEntityMapper.map(downloadEntity)

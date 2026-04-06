@@ -11,9 +11,11 @@ class ScreenWithPlaylistsMapper {
         return Screen(
             screenKey = from.screen.screenKey,
             modified = from.screen.modified ?: 0L,
+            isDownload = from.screen.isDownloaded,
             playlists = from.playlists.map { playlistWithItems ->
                 Playlist(
                     playlistKey = playlistWithItems.playlist.playlistKey,
+                    isDownload = playlistWithItems.playlist.isDownloaded,
                     items = playlistWithItems.items.map { item ->
                         PlaylistItem(
                             duration = item.duration ?: 0,

@@ -1,7 +1,6 @@
 package com.da.data.local.db
 
 import android.content.Context
-import android.util.Log
 import androidx.room.Room
 
 object DatabaseProvider {

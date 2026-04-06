@@ -15,5 +15,5 @@ data class PlaylistItemForReplay (
     val order:Int,
     val path: String,
     val isVideo: Boolean,
-    val fadeDuration: Int
+    val durationSec: Int
     )
